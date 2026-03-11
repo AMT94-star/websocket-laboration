@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="messages"></div>
+<input type="text" id="msg"/>
+<button onclick="send()">Skicka meddelande</button>
+
+<script>
+    const username = "Asli";
+    const socket = new WebSocket(
+        "ws://localhost:8080/websocket-laboration/ws/chat"
+    );
+    socket.onmessage = (event) => {
+        //det som ska hända när ett meddelande kommer
+        let div = document.getElementById("messages");
+
+        div.innerHTML += "<p>" + event.data + "</p>";
+    }
+
+    socket.onopen = () => {
+        console.log("Ansluten");
+    }
+
+    const send = () => {
+        let text = document.getElementById("msg").value;
+        socket.send(username + ": " + text);
+        document.getElementById("msg").value = "";
+    }
+
+</script>
+
+</body>
+</html>
